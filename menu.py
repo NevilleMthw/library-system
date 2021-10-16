@@ -19,9 +19,9 @@ def recommendations() -> None:
 
 
 def checkIn() -> None:
-    global BOOKIMG
-    BOOKIMG = ImageTk.PhotoImage(Image.open('book.jpg'))
-    w = Label(BOOK_CHECKIN, image=BOOKIMG)
+    global BOOK_IMG
+    BOOK_IMG = ImageTk.PhotoImage(Image.open('book.jpg'))
+    w = Label(BOOK_CHECKIN, image=BOOK_IMG)
     w.grid(row=3, column=3)
 #####MAIN FUNCTIONS######
 
