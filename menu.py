@@ -3,6 +3,7 @@ import tkinter.ttk as ttk
 import matplotlib
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from PIL import ImageTk, Image
 
 
 def recommendations() -> None:
@@ -16,6 +17,12 @@ def recommendations() -> None:
     canvas = FigureCanvasTkAgg(figure, master=RECOMMENDATIONS)
     canvas.get_tk_widget().pack()
 
+
+def checkIn() -> None:
+    global BOOKIMG
+    BOOKIMG = ImageTk.PhotoImage(Image.open('book.jpg'))
+    w = Label(BOOK_CHECKIN, image=BOOKIMG)
+    w.grid(row=3, column=3)
 #####MAIN FUNCTIONS######
 
 
@@ -38,5 +45,5 @@ TAB_CONTROL.add(RECOMMENDATIONS, text='Recommendations')
 TAB_CONTROL.pack(expand=1, fill="both")
 
 recommendations()
-
+checkIn()
 WINDOW.mainloop()
