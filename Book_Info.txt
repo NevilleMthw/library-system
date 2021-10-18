@@ -1,0 +1,11 @@
+ID,Genre,Title,Author,Loan Period,Purchase Date,Member id
+A1,Fantasy Fiction,Harry Potter and the Philosopher's Stone,J.K.Rowling,7 days,11/10/2021,nm1313
+A2,Fantasy Fiction,Harry Potter and the Chamber of Secrets,J.K.Rowling,10 days,10/10/2021,rp3110
+A3,Fantasy Fiction,Harry Potter and the Prisoner of Azkaban,J.K.Rowling,8 days,11/9/2021,js2810
+A4,Fantasy Fiction,Harry Potter and the Goblet of Fire,J.K.Rowling,5 days,10/9/2021,jb1807
+A5,Fantasy Fiction,Harry Potter and the Order of the Pheonix,J.K.Rowling,11 days,12/12/2021,ma1111
+A6,Horror Fiction,Welcome to Dead House,R.L. Stine,3 days,12/2/2021,jen1410
+A7,Horror Fiction,One Day at HorrorLand,R.L. Stine,4 days,2/1/2021,roh1101
+A8,Horror Fiction,The Scarecrow Walks at Midnight,R.L. Stine,11 days,4/3/2021,vj2612
+A9,Horror Fiction,Monster Blood,R.L. Stine,15 days,12/10/2021,ku2508
+A10,Horror Fiction,Say Cheese and Die!,R.L. Stine,18 days,9/4/2021,at2509
