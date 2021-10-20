@@ -1,4 +1,3 @@
-ID,Genre,Title,Author,Loan Period,Purchase Date,Member id
 A1,Fantasy Fiction,Harry Potter and the Philosopher's Stone,J.K.Rowling,7 days,11/10/2021,nmoc
 A2,Fantasy Fiction,Harry Potter and the Chamber of Secrets,J.K.Rowling,28 days,10/10/2021,rpew
 A3,Fantasy Fiction,Harry Potter and the Prisoner of Azkaban,J.K.Rowling,28 days,11/9/2021,jsbh
