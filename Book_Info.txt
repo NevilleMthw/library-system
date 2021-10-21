@@ -1,10 +1,10 @@
-A1,Fantasy Fiction,Harry Potter and the Philosopher's Stone,J.K.Rowling,7 days,11/10/2021,nmoc
-A2,Fantasy Fiction,Harry Potter and the Chamber of Secrets,J.K.Rowling,28 days,10/10/2021,rpew
-A3,Fantasy Fiction,Harry Potter and the Prisoner of Azkaban,J.K.Rowling,28 days,11/9/2021,jsbh
-A4,Fantasy Fiction,Harry Potter and the Goblet of Fire,J.K.Rowling,7 days,10/9/2021,jbbg
-A5,Fantasy Fiction,Harry Potter and the Order of the Pheonix,J.K.Rowling,7 days,12/12/2021,mauj
-A6,Horror Fiction,Welcome to Dead House,R.L. Stine,7 days,12/2/2021,jenj
-A7,Horror Fiction,One Day at HorrorLand,R.L. Stine,28 days,2/1/2021,rohu
-A8,Horror Fiction,The Scarecrow Walks at Midnight,R.L. Stine,28 days,4/3/2021,vjiu
-A9,Horror Fiction,Monster Blood,R.L. Stine,28 days,12/10/2021,kulo
-A10,Horror Fiction,Say Cheese and Die!,R.L. Stine,7 days,9/4/2021,atil
+A1,Fantasy Fiction,Harry Potter and the Philosopher's Stone,J.K.Rowling,7 days,11/10/2021,0
+A2,Fantasy Fiction,Harry Potter and the Chamber of Secrets,J.K.Rowling,28 days,10/10/2021,0
+A3,Fantasy Fiction,Harry Potter and the Prisoner of Azkaban,J.K.Rowling,28 days,11/9/2021,0
+A4,Fantasy Fiction,Harry Potter and the Goblet of Fire,J.K.Rowling,7 days,10/9/2021,0
+A5,Fantasy Fiction,Harry Potter and the Order of the Pheonix,J.K.Rowling,7 days,12/12/2021,0
+A6,Horror Fiction,Welcome to Dead House,R.L. Stine,7 days,12/2/2021,0
+A7,Horror Fiction,One Day at HorrorLand,R.L. Stine,28 days,2/1/2021,0
+A8,Horror Fiction,The Scarecrow Walks at Midnight,R.L. Stine,28 days,4/3/2021,0
+A9,Horror Fiction,Monster Blood,R.L. Stine,28 days,12/10/2021,0
+A10,Horror Fiction,Say Cheese and Die!,R.L. Stine,7 days,9/4/2021,0
