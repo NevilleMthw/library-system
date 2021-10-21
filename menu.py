@@ -22,7 +22,7 @@ class GUIClass:
         canvas = FigureCanvasTkAgg(figure, master=book_recommendations)
         canvas.get_tk_widget().pack()
 
-    def check_Out(self) -> None:
+    def checkout(self) -> None:
         global book_img
         global book_id_entry
         book_img = ImageTk.PhotoImage(Image.open("book.jpg"))
@@ -42,15 +42,21 @@ class GUIClass:
             book_checkIn, bd=2, bg="Light Blue", justify=CENTER, font=("Arial", 13)
         )
         book_id_entry.pack(side=TOP)
-        book_checkIn_button = Button(
+        book_checkout_button = Button(
             book_checkIn,
             text="Book Checkout",
             bg="Light Blue",
             font=("Arial", 13),
-            command=lambda: self.Checkout.issue(book_id_entry),
+            command=lambda: self.Checkout.issue(
+                book_id_entry.get(), member_id_entry.get()
+            ),
         )
-        book_checkIn_button.pack(pady=20, side=TOP)
-        return book_id_entry.get()
+        book_checkout_button.pack(pady=20, side=TOP)
+
+    def checkout_Message(self) -> str:
+        pass
+        # book_checkout_message:str = Label(book_checkIn, text="Book ID", font=("Arial", 18), bg="#FEEAE6")
+        # book_checkout_message.pack()
 
     def returns(self) -> None:
         global book_img1
@@ -93,7 +99,7 @@ tab_control.pack(expand=1, fill="both")
 if __name__ == "__main__":
     GUI = GUIClass()
     GUI.recommendations()
-    GUI.check_Out()
+    GUI.checkout()
     GUI.returns()
 
 window.mainloop()
