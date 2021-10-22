@@ -9,10 +9,10 @@ class CheckoutBook:
         issue_id_change = self.Database.book_MemberID_Change(
             member_id_entry, book_id_entry
         )
-        data = issue_id_change.fetchall()
+        data = issue_id_change
         y = len(data)
         for x in range(0, y):
-            if book_id_entry == data[x][1] and member_id_entry == data[0][x]:
+            if book_id_entry and member_id_entry == data:
                 print(issue_id_change)
 
 
