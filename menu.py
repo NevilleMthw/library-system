@@ -48,7 +48,7 @@ class GUIClass:
             bg="Light Blue",
             font=("Arial", 13),
             command=lambda: self.Checkout.issue(
-                book_id_entry.get(), member_id_entry.get()
+                member_id_entry.get(), book_id_entry.get()
             ),
         )
         book_checkout_button.pack(pady=20, side=TOP)
