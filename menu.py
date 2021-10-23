@@ -1,4 +1,5 @@
 from tkinter import *
+import tkinter.scrolledtext as st
 import tkinter.ttk as ttk
 import matplotlib
 from matplotlib.figure import Figure
@@ -28,24 +29,24 @@ class GUIClass:
         global book_img
         global book_id_entry
         book_img = ImageTk.PhotoImage(Image.open("book.jpg"))
-        book_img_label = Label(book_checkIn, image=book_img)
+        book_img_label = Label(book_checkout, image=book_img)
         book_img_label.pack(side=TOP)
         member_id = Label(
-            book_checkIn, text="Member ID", font=("Arial", 18), bg="#FEEAE6"
+            book_checkout, text="Member ID", font=("Arial", 18), bg="#FEEAE6"
         )
         member_id.pack(padx=400, pady=40, side=TOP)
         member_id_entry = Entry(
-            book_checkIn, bd=2, bg="Light Blue", justify=CENTER, font=("Arial", 13)
+            book_checkout, bd=2, bg="Light Blue", justify=CENTER, font=("Arial", 13)
         )
         member_id_entry.pack(side=TOP)
-        book_id = Label(book_checkIn, text="Book ID", font=("Arial", 18), bg="#FEEAE6")
+        book_id = Label(book_checkout, text="Book ID", font=("Arial", 18), bg="#FEEAE6")
         book_id.pack(padx=400, pady=40, side=TOP)
         book_id_entry = Entry(
-            book_checkIn, bd=2, bg="Light Blue", justify=CENTER, font=("Arial", 13)
+            book_checkout, bd=2, bg="Light Blue", justify=CENTER, font=("Arial", 13)
         )
         book_id_entry.pack(side=TOP)
         book_checkout_button = Button(
-            book_checkIn,
+            book_checkout,
             text="Book Checkout",
             bg="Light Blue",
             font=("Arial", 13),
@@ -80,7 +81,13 @@ class GUIClass:
             command=lambda: self.Return.returns(book_id_entry.get()),
         )
         book_return_button.pack(pady=20, side=TOP)
-
+    
+    def books_Available(self) -> None:
+        books_area_heading = Label(dashboard, text='Available Books', font=('Arial', 18))
+        books_area_heading.grid(column=0,row=0)
+        books_area = st.ScrolledText(dashboard, width=100, height=20)
+        books_area.grid(column=0, row=11, rowspan=20)
+        books_area.configure(state='disabled')
 
 #####MAIN FUNCTIONS######
 
@@ -90,8 +97,11 @@ window.geometry("1100x580")
 
 tab_control = ttk.Notebook(window)
 
-book_checkIn = Frame(tab_control, background="#FEEAE6")
-tab_control.add(book_checkIn, text="Book Checkout")
+dashboard = Frame(tab_control, background="#FEEAE6")
+tab_control.add(dashboard, text="Dashboard")
+
+book_checkout = Frame(tab_control, background="#FEEAE6")
+tab_control.add(book_checkout, text="Book Checkout")
 
 book_return = Frame(tab_control, background="#FEEAE6")
 tab_control.add(book_return, text="Book Return")
@@ -107,5 +117,6 @@ if __name__ == "__main__":
     GUI.recommendations()
     GUI.checkout()
     GUI.returns()
+    GUI.books_Available()
 
 window.mainloop()
