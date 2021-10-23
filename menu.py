@@ -5,11 +5,13 @@ from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from PIL import ImageTk, Image
 from bookCheckout import CheckoutBook
+from bookReturn import ReturnBook
 
 
 class GUIClass:
     def __init__(self) -> None:
         self.Checkout = CheckoutBook()
+        self.Return = ReturnBook()
 
     def recommendations(self) -> None:
         matplotlib.use("TkAgg")
@@ -71,7 +73,11 @@ class GUIClass:
         )
         book_id_entry1.pack(side=TOP)
         book_return_button = Button(
-            book_return, text="Book Return", bg="Light Blue", font=("Arial", 13)
+            book_return,
+            text="Book Return",
+            bg="Light Blue",
+            font=("Arial", 13),
+            command=lambda: self.Return.returns(book_id_entry.get()),
         )
         book_return_button.pack(pady=20, side=TOP)
 

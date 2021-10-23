@@ -1,5 +1,6 @@
 import sqlite3
 import csv
+from datetime import datetime
 
 
 class Database:
@@ -13,7 +14,7 @@ class Database:
                     "CREATE TABLE IF NOT EXISTS Book_Info (ID PRIMARY KEY, Genre, Title, Author, LoanPeriod, PurchaseDate, CurrentLoanStatus)"
                 )
                 self.cursor.execute(
-                    "CREATE TABLE IF NOT EXISTS Loan_History (TransactionID INTEGER PRIMARY KEY AUTOINCREMENT, BookID, CheckoutDate DATETIME default CURRENT_DATE, ReturnDate DATETIME)"
+                    "CREATE TABLE IF NOT EXISTS Loan_History (TransactionID INTEGER PRIMARY KEY AUTOINCREMENT, BookID, CheckoutDate DATETIME default CURRENT_DATE, ReturnDate)"
                 )
                 with open("Book_Info.txt") as file_open:
                     for row in csv.reader(file_open, delimiter=","):
@@ -25,43 +26,37 @@ class Database:
             except Exception as e:
                 print(e)
 
-    def book_Retrieval(self) -> str:
-        with sqlite3.connect("Library.db", isolation_level=None) as connection:
-            cursor = connection.cursor()
-            connection.execute("pragma journal_mode=wal")
-            result = cursor.execute("SELECT CurrentLoanStatus, ID FROM Book_Info")
-            connection.commit()
-            return result
-
     def book_MemberID_Change(self, member_id_entry: str, book_id_entry: str) -> str:
         with sqlite3.connect("Library.db", isolation_level=None) as connection:
             cursor = connection.cursor()
             connection.execute("pragma journal_mode=wal")
-            result = cursor.execute("SELECT CurrentLoanStatus, ID FROM Book_Info")
-            result1 = cursor.execute(
-                f"UPDATE Book_Info SET CurrentLoanStatus = '{member_id_entry}' WHERE ID = '{book_id_entry}'"
+            result = cursor.execute(
+                "UPDATE Book_Info SET CurrentLoanStatus = ? WHERE ID = ?",
+                (member_id_entry, book_id_entry,),
             )
-            # result1 = cursor.execute(
-            #     "UPDATE Book_Info SET CurrentLoanStatus = ? WHERE ID = ?", (member_id_entry,book_id_entry)
-            # )
-            result2 = cursor.execute(
-                f"INSERT INTO Loan_History (BookID) VALUES ('{book_id_entry}')"
+            result1 = cursor.execute(
+                "INSERT INTO Loan_History (BookID) VALUES (?)", (book_id_entry,)
             )
             connection.commit()
-            return result.fetchall(), result1.fetchall(), result2.fetchall()
+            return result.fetchall(), result1.fetchall()
 
-    def book_Return(self, checkout_date, return_date, book_id_entry) -> None:
+    def book_Return(self, book_id_entry) -> None:
         with sqlite3.connect("Library.db", isolation_level=None) as connection:
+            return_date = datetime.now().strftime("%m-%d-%Y")
             cursor = connection.cursor()
             connection.execute("pragma journal_mode=wal")
             result = cursor.execute(
-                f"""UPDATE Loan_History SET ReturnDate = '{return_date}'  WHERE BookID = '{book_id_entry}'"""
+                "UPDATE Loan_History SET ReturnDate = ? WHERE BookID = ? AND ReturnDate IS NULL",
+                (
+                    return_date,
+                    book_id_entry,
+                ),
             )
             connection.commit()
-            return result
+            return result.fetchall()
 
 
 if __name__ == "__main__":
     DB = Database()
     DB.populate_DB()
-    # DB.book_Return()
+    # DB.book_Return('A1')
