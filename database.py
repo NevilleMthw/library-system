@@ -16,6 +16,9 @@ class Database:
                 self.cursor.execute(
                     "CREATE TABLE IF NOT EXISTS Loan_History (TransactionID INTEGER PRIMARY KEY AUTOINCREMENT, BookID, CheckoutDate DATETIME default CURRENT_DATE, ReturnDate)"
                 )
+                self.cursor.execute(
+                    "CREATE TABLE IF NOT EXISTS Overdue_Books (BookID PRIMARY KEY, CurrentLoanStatus, CheckoutDate DATETIME default CURRENT_DATE, ReturnDate, Fines, OverdueDays DATETIME)"
+                )
                 with open("Book_Info.txt") as file_open:
                     for row in csv.reader(file_open, delimiter=","):
                         self.cursor.execute(
@@ -39,17 +42,21 @@ class Database:
             connection.execute("pragma journal_mode=wal")
             result = cursor.execute(
                 "UPDATE Book_Info SET CurrentLoanStatus = ? WHERE ID = ?",
-                (member_id_entry, book_id_entry,),
+                (
+                    member_id_entry,
+                    book_id_entry,
+                ),
             )
             result1 = cursor.execute(
                 "INSERT INTO Loan_History (BookID) VALUES (?)", (book_id_entry,)
             )
+            result2 = cursor.execute("INSERT INTO Overdue_Books (BookID, CurrentLoanStatus) VALUES (?, ?)", (book_id_entry,member_id_entry,))
             connection.commit()
-            return result.fetchall(), result1.fetchall()
+            return result.fetchall(), result1.fetchall(), result2.fetchall()
 
     def book_Return(self, book_id_entry) -> None:
         with sqlite3.connect("Library.db", isolation_level=None) as connection:
-            return_date = datetime.now().strftime("%m-%d-%Y")
+            return_date = datetime.now().strftime("%Y-%m-%d")
             cursor = connection.cursor()
             connection.execute("pragma journal_mode=wal")
             result = cursor.execute(
@@ -59,22 +66,22 @@ class Database:
                     book_id_entry,
                 ),
             )
+            result1 = cursor.execute('UPDATE Overdue_Books SET OverdueDays = ? - CheckoutDate WHERE BookID = ?',(return_date,book_id_entry,))
             connection.commit()
-            return result.fetchall()
-    
+            return result.fetchall(), result1.fetchall()
+
     def book_Charge(self) -> None:
         with sqlite3.connect("Library.db", isolation_level=None) as connection:
             return_date = datetime.now().strftime("%m-%d-%Y")
             cursor = connection.cursor()
             connection.execute("pragma journal_mode=wal")
             result = cursor.execute(
-                "UPDATE Loan_History SET ReturnDate = ? WHERE BookID = ? AND ReturnDate IS NULL",
-                (
-                    return_date,
-                ),
+                "INSERT Loan_History SET ReturnDate = ? WHERE BookID = ? AND ReturnDate IS NULL",
+                (return_date,),
             )
             connection.commit()
             return result.fetchall()
+
 
 if __name__ == "__main__":
     DB = Database()
