@@ -22,6 +22,13 @@ class Database:
                             "INSERT INTO Book_Info VALUES (:ID, :Genre, :Title, :Author, :LoanPeriod, :PurchaseDate, :CurrentLoanStatus)",
                             row,
                         )
+                with open("Loan_History.txt") as file_open1:
+                    for row in csv.reader(file_open1, delimiter=","):
+                        self.cursor.execute(
+                            "INSERT INTO Loan_History VALUES (:TransactionID, :BookID, :CheckoutDate,:ReturnDate)",
+                            row,
+                        )
+                file_open1.close()
                 self.connection.commit()
             except Exception as e:
                 print(e)
@@ -54,9 +61,21 @@ class Database:
             )
             connection.commit()
             return result.fetchall()
-
+    
+    def book_Charge(self) -> None:
+        with sqlite3.connect("Library.db", isolation_level=None) as connection:
+            return_date = datetime.now().strftime("%m-%d-%Y")
+            cursor = connection.cursor()
+            connection.execute("pragma journal_mode=wal")
+            result = cursor.execute(
+                "UPDATE Loan_History SET ReturnDate = ? WHERE BookID = ? AND ReturnDate IS NULL",
+                (
+                    return_date,
+                ),
+            )
+            connection.commit()
+            return result.fetchall()
 
 if __name__ == "__main__":
     DB = Database()
     DB.populate_DB()
-    # DB.book_Return('A1')
