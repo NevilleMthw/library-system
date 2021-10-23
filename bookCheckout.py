@@ -12,8 +12,8 @@ class CheckoutBook:
         data = issue_id_change
         y = len(data)
         for x in range(0, y):
-            if book_id_entry and member_id_entry == data:
-                print(issue_id_change)
+            if book_id_entry == data:
+                print('Book issued successfully!')
 
 
 if __name__ == "__main__":
