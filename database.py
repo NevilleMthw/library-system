@@ -4,7 +4,7 @@ from datetime import datetime
 
 
 class Database:
-    def populate_DB(self) -> None:
+    def __init__(self) -> None:
         self.connection = sqlite3.connect("Library.db")
         self.connection.execute("pragma journal_mode=wal")
         self.cursor = self.connection.cursor()
@@ -19,22 +19,30 @@ class Database:
                 self.cursor.execute(
                     "CREATE TABLE IF NOT EXISTS Overdue_Books (BookID PRIMARY KEY, CurrentLoanStatus, CheckoutDate DATETIME default CURRENT_DATE, ReturnDate, Fines REAL, OverdueDays DATETIME)"
                 )
-                with open("Book_Info.txt") as file_open:
-                    for row in csv.reader(file_open, delimiter=","):
-                        self.cursor.execute(
-                            "INSERT INTO Book_Info VALUES (:ID, :Genre, :Title, :Author, :LoanPeriod, :PurchaseDate, :CurrentLoanStatus)",
-                            row,
-                        )
-                with open("Loan_History.txt") as file_open1:
-                    for row in csv.reader(file_open1, delimiter=","):
-                        self.cursor.execute(
-                            "INSERT INTO Loan_History VALUES (:TransactionID, :BookID, :CheckoutDate,:ReturnDate)",
-                            row,
-                        )
-                file_open1.close()
                 self.connection.commit()
             except Exception as e:
                 print(e)
+            finally:
+                self.populate_DB()
+
+    def populate_DB(self) -> None:
+        try:
+            with open("Book_Info.txt") as file_open:
+                for row in csv.reader(file_open, delimiter=","):
+                    self.cursor.execute(
+                        "INSERT or IGNORE INTO Book_Info VALUES (:ID, :Genre, :Title, :Author, :LoanPeriod, :PurchaseDate, :CurrentLoanStatus)",
+                        row,
+                    )
+            file_open.close()
+            with open("Loan_History.txt") as file_open1:
+                for row in csv.reader(file_open1, delimiter=","):
+                    self.cursor.execute(
+                        "INSERT or IGNORE INTO Loan_History VALUES (:TransactionID, :BookID, :CheckoutDate,:ReturnDate)",
+                        row,
+                    )
+            file_open1.close()
+        except Exception as e:
+            print(e)
 
     def book_MemberID_Change(self, member_id_entry: str, book_id_entry: str) -> str:
         with sqlite3.connect("Library.db", isolation_level=None) as connection:
@@ -64,10 +72,8 @@ class Database:
         with sqlite3.connect("Library.db", isolation_level=None) as connection:
             return_date = datetime.now().strftime("%Y-%m-%d")
             return_date1 = datetime.now()
-            # print(return_date)
             overdue_days: int = return_date1.day
             fine_amount = 0.25
-            print(overdue_days)
             cursor = connection.cursor()
             connection.execute("pragma journal_mode=wal")
             result = cursor.execute(
@@ -101,6 +107,5 @@ class Database:
 
 if __name__ == "__main__":
     DB = Database()
-    DB.populate_DB()
     DB.book_Return("A7")
     # DB.book_Charge()
