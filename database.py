@@ -138,7 +138,7 @@ class Database:
             connection.commit()
             return result.fetchall(), result1.fetchall(), result2.fetchall()
 
-    # This function would update the Loan_History table which would then go onto the Overdue_Books update, 
+    # This function would update the Loan_History table which would then go onto the Overdue_Books update,
     # where the overdue days and fines are bein calculated through SQL query using JULIANDAY conversion.
     def book_Return(self, book_id_entry: str) -> None:
         with sqlite3.connect("Library.db", isolation_level=None) as connection:
