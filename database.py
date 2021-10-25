@@ -14,16 +14,74 @@ class Database:
                     "CREATE TABLE IF NOT EXISTS Book_Info (ID PRIMARY KEY, Genre, Title, Author, LoanPeriod, PurchaseDate, CurrentLoanStatus)"
                 )
                 self.cursor.execute(
-                    "CREATE TABLE IF NOT EXISTS Loan_History (TransactionID INTEGER PRIMARY KEY AUTOINCREMENT, BookID, CheckoutDate DATETIME default CURRENT_DATE, ReturnDate)"
+                    "CREATE TABLE IF NOT EXISTS Loan_History (TransactionID INTEGER PRIMARY KEY AUTOINCREMENT, BookID, CheckoutDate DATETIME default CURRENT_DATE, ReturnDate DATE DEFAULT NULL)"
                 )
                 self.cursor.execute(
                     "CREATE TABLE IF NOT EXISTS Overdue_Books (BookID PRIMARY KEY, CurrentLoanStatus, CheckoutDate DATETIME default CURRENT_DATE, ReturnDate, Fines REAL, OverdueDays DATETIME)"
+                )
+                self.cursor.execute(
+                    "CREATE TABLE IF NOT EXISTS Image_Data (Photo BLOB NOT NULL)"
                 )
                 self.connection.commit()
             except Exception as e:
                 print(e)
             finally:
                 self.populate_DB()
+
+    def convert_Image(self, photo):
+        with open(photo, "rb") as books_img:
+            img_data = books_img.read()
+        books_img.close()
+        return img_data
+
+    def insert_Image(self, book):
+        try:
+            self.connection = sqlite3.connect("Library.db")
+            self.connection.execute("pragma journal_mode=wal")
+            self.cursor = self.connection.cursor()
+            print("Connected to SQLite")
+            bookImg = self.convert_Image(book)
+            data_tuple = bookImg
+            self.cursor.execute(
+                "INSERT INTO Image_Data (Photo) VALUES (?)", [data_tuple]
+            )
+            self.connection.commit()
+            print("Image uploaded")
+        except sqlite3.Error as e:
+            print(e)
+        finally:
+            if self.connection:
+                self.connection.close()
+                print("FINISHED.")
+
+    def write_Img(self, data, filename):
+        # Convert binary data to proper format and write it on Hard Disk
+        with open(filename, "wb") as file:
+            file.write(data)
+
+    def write_Img_Data(self):
+        try:
+            global r_data
+            r_data = ""
+            self.connection = sqlite3.connect("Library.db")
+            self.connection.execute("pragma journal_mode=wal")
+            self.cursor = self.connection.cursor()
+            print("Connected to SQLite")
+            select_books = "SELECT * FROM Image_Data"
+            data = self.cursor.execute(select_books)
+            for x in data:
+                r_data = x[0]
+                photo_path = "book.jpg"
+                photo_path1 = "book return.jpg"
+                self.write_Img(r_data, photo_path)
+                self.write_Img(r_data, photo_path1)
+            self.connection.commit()
+        except sqlite3.Error as e:
+            print(e)
+        finally:
+            if self.connection:
+                self.connection.close()
+                print("sqlite connection is closed")
 
     def populate_DB(self) -> None:
         try:
@@ -68,11 +126,10 @@ class Database:
             connection.commit()
             return result.fetchall(), result1.fetchall(), result2.fetchall()
 
-    def book_Return(self, book_id_entry) -> None:
+    def book_Return(self, book_id_entry: str) -> None:
         with sqlite3.connect("Library.db", isolation_level=None) as connection:
             return_date = datetime.now().strftime("%Y-%m-%d")
             return_date1 = datetime.now()
-            overdue_days: int = return_date1.day
             fine_amount = 0.25
             cursor = connection.cursor()
             connection.execute("pragma journal_mode=wal")
@@ -96,16 +153,11 @@ class Database:
             connection.commit()
             return result.fetchall(), result1.fetchall()
 
-    def book_Charge(self) -> None:
-        with sqlite3.connect("Library.db", isolation_level=None) as connection:
-            cursor = connection.cursor()
-            connection.execute("pragma journal_mode=wal")
-            result = cursor.execute("SELECT * FROM Overdue_Books")
-            connection.commit()
-            return result.fetchall()
-
 
 if __name__ == "__main__":
     DB = Database()
     DB.book_Return("A7")
+    DB.write_Img_Data()
+    DB.write_Img_Data()
+    DB.book_Return("A2")
     # DB.book_Charge()
