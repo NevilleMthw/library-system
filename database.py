@@ -4,7 +4,15 @@ from datetime import datetime
 
 
 class Database:
+    """This class contains image read and write functions along with population of database,
+    updation of tables and insert queries for each use case.
+    All SQLite queries are being run in this python module.
+    """
+
     def __init__(self) -> None:
+        """Connection to database, along with context managers (WAL: Write-Ahead Logging) to prevent database lockout.
+        Creation of tables are being executed within the exception handling test case.
+        """
         self.connection = sqlite3.connect("Library.db")
         self.connection.execute("pragma journal_mode=wal")
         self.cursor = self.connection.cursor()
@@ -28,12 +36,14 @@ class Database:
             finally:
                 self.populate_DB()
 
+    # Converting digital data to binary format
     def convert_Image(self, photo):
         with open(photo, "rb") as books_img:
             img_data = books_img.read()
         books_img.close()
         return img_data
 
+    # Connecting to database where image is being read as bytes and then inserted as a tuple.
     def insert_Image(self, book):
         try:
             self.connection = sqlite3.connect("Library.db")
@@ -54,11 +64,12 @@ class Database:
                 self.connection.close()
                 print("FINISHED.")
 
+    # Convert binary data to proper format
     def write_Img(self, data, filename):
-        # Convert binary data to proper format and write it on Hard Disk
         with open(filename, "wb") as file:
             file.write(data)
 
+    # Retrieve the image as BLOB data type and write onto the hard drive.
     def write_Img_Data(self):
         try:
             global r_data
@@ -102,6 +113,7 @@ class Database:
         except Exception as e:
             print(e)
 
+    # This function would work during the checkout phase which would update the Book_Info table then insert to the Loan_History and Overdue_Books.
     def book_MemberID_Change(self, member_id_entry: str, book_id_entry: str) -> str:
         with sqlite3.connect("Library.db", isolation_level=None) as connection:
             cursor = connection.cursor()
@@ -126,10 +138,11 @@ class Database:
             connection.commit()
             return result.fetchall(), result1.fetchall(), result2.fetchall()
 
+    # This function would update the Loan_History table which would then go onto the Overdue_Books update, 
+    # where the overdue days and fines are bein calculated through SQL query using JULIANDAY conversion.
     def book_Return(self, book_id_entry: str) -> None:
         with sqlite3.connect("Library.db", isolation_level=None) as connection:
             return_date = datetime.now().strftime("%Y-%m-%d")
-            return_date1 = datetime.now()
             fine_amount = 0.25
             cursor = connection.cursor()
             connection.execute("pragma journal_mode=wal")
@@ -156,8 +169,5 @@ class Database:
 
 if __name__ == "__main__":
     DB = Database()
-    DB.book_Return("A7")
     DB.write_Img_Data()
     DB.write_Img_Data()
-    DB.book_Return("A2")
-    # DB.book_Charge()

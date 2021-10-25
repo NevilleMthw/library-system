@@ -2,7 +2,9 @@ from database import Database
 
 
 class CheckoutBook:
+    """This class returns the issue function where the bookID is validated to check the data in the DB."""
     def __init__(self) -> None:
+        """Initializing the database class to use the functions from that python module."""
         self.Database = Database()
 
     def issue(self, member_id_entry: str, book_id_entry: str) -> str:

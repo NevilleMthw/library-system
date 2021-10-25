@@ -1,5 +1,9 @@
+"""
+                                            Name: Neville Mathew
+                                    University: Loughborough University
+                                    Project: Library Management System 
+"""
 from tkinter import *
-import tkinter.scrolledtext as st
 from tkinter import messagebox
 import tkinter.ttk as ttk
 import matplotlib
@@ -12,7 +16,12 @@ from bookCharge import OverdueFines
 
 
 class GUIClass:
+    """This class will contain all the elements of the graphical user interface.
+    It will return the recommendations, checkout and returns function.
+    """
+
     def __init__(self) -> None:
+        """Initialize the controller modules to be used with other functions."""
         self.Checkout = CheckoutBook()
         self.Return = ReturnBook()
         self.Overdue = OverdueFines()
@@ -54,6 +63,7 @@ class GUIClass:
             text="Book Checkout",
             bg="Light Blue",
             font=("Arial", 13),
+            # Through the use of lambda, we can use this anonymous function and call multiple expressions.
             command=lambda: [
                 self.Checkout.issue(
                     member_id_entry.get()[:4],
@@ -88,7 +98,8 @@ class GUIClass:
         )
         book_return_button.pack(pady=20, side=TOP)
 
-#####MAIN FUNCTIONS######
+
+# The main functions which call all the Tkinter elements such as the Frames, text etc.
 
 window = Tk()
 window.title("Library Management System - ADMIN")
@@ -107,6 +118,7 @@ tab_control.add(book_recommendations, text="Recommendations")
 
 tab_control.pack(expand=1, fill="both")
 
+# Testing use case, which calls the functions.
 
 if __name__ == "__main__":
     GUI = GUIClass()

@@ -2,9 +2,13 @@ from database import Database
 
 
 class ReturnBook:
+    """
+    This class returns the result with the bookID, 
+    thereby checking the bookID entry and performing the respective functions.
+    """
     def __init__(self) -> None:
+        """Initializing the database class to use the functions from that python module."""
         self.Database = Database()
-        # self.Date = date()
 
     def returns(self, book_id_entry: str) -> str:
         return_result = self.Database.book_Return(book_id_entry)
