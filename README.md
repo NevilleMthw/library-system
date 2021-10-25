@@ -2,6 +2,9 @@
 
 A library management system which has functions for checking in books, returning books and recommendation of books for users. The GUI is robust and provides adequate functionality for basic functions.
 
+Database Tables: Book_Info, Loan_History, Overdue_Books and Image_Data.
+Text Files: Loan_History.txt (100 transactions) and Book_Info.txt.
+
 1. Functionality guide:
    1. To start the application, one would have to run the python module: `python menu.py`.
    2. After starting the application, three tabs would be present: `Book Checkout`, `Book Return`, `Recommendations`.
@@ -14,6 +17,7 @@ A library management system which has functions for checking in books, returning
    2. Overall GUI design could be made more presentable and pleaseing to the eyes.
    3. The calculation of book fines and overdue days could be better suited or placed if done in the `bookCharge` python module instead of a direct SQL query.
    4. Labels or Messageboxes could be used to show once button is clicked for better readability and understanding.
+   5. `Recommendations` logic function has not been implemented.
 3. Problems faced:
    1. Time management.
    2. Coursework specification understanding.
