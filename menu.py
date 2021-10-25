@@ -1,5 +1,6 @@
 from tkinter import *
 import tkinter.scrolledtext as st
+from tkinter import messagebox
 import tkinter.ttk as ttk
 import matplotlib
 from matplotlib.figure import Figure
@@ -7,12 +8,14 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from PIL import ImageTk, Image
 from bookCheckout import CheckoutBook
 from bookReturn import ReturnBook
+from bookCharge import OverdueFines
 
 
 class GUIClass:
     def __init__(self) -> None:
         self.Checkout = CheckoutBook()
         self.Return = ReturnBook()
+        self.Overdue = OverdueFines()
 
     def recommendations(self) -> None:
         matplotlib.use("TkAgg")
@@ -28,6 +31,7 @@ class GUIClass:
     def checkout(self) -> None:
         global book_img
         global book_id_entry
+        global member_id_entry
         book_img = ImageTk.PhotoImage(Image.open("book.jpg"))
         book_img_label = Label(book_checkout, image=book_img)
         book_img_label.pack(side=TOP)
@@ -50,29 +54,31 @@ class GUIClass:
             text="Book Checkout",
             bg="Light Blue",
             font=("Arial", 13),
-            command=lambda: self.Checkout.issue(
-                member_id_entry.get(), book_id_entry.get()
-            ),
+            command=lambda: [
+                self.Checkout.issue(
+                    member_id_entry.get()[:4],
+                    book_id_entry.get(),
+                ),
+                self.checkout_Message(),
+            ],
         )
         book_checkout_button.pack(pady=20, side=TOP)
 
     def checkout_Message(self) -> str:
-        pass
-        # book_checkout_message:str = Label(book_checkIn, text="Book ID", font=("Arial", 18), bg="#FEEAE6")
-        # book_checkout_message.pack()
+        if book_id_entry.get() != None:
+            messagebox.showinfo(title="Book can be issued", message="Have a great day!")
 
     def returns(self) -> None:
         global book_img1
-        global book_id_entry1
         book_img1 = ImageTk.PhotoImage(Image.open("book return.jpg"))
         book_img_label1 = Label(book_return, image=book_img1)
         book_img_label1.pack(side=TOP)
         book_id1 = Label(book_return, text="Book ID", font=("Arial", 18), bg="#FEEAE6")
         book_id1.pack(padx=400, pady=40, side=TOP)
-        book_id_entry1 = Entry(
+        book_id_entry = Entry(
             book_return, bd=2, bg="Light Blue", justify=CENTER, font=("Arial", 13)
         )
-        book_id_entry1.pack(side=TOP)
+        book_id_entry.pack(side=TOP)
         book_return_button = Button(
             book_return,
             text="Book Return",
@@ -81,13 +87,6 @@ class GUIClass:
             command=lambda: self.Return.returns(book_id_entry.get()),
         )
         book_return_button.pack(pady=20, side=TOP)
-    
-    def books_Available(self) -> None:
-        books_area_heading = Label(dashboard, text='Available Books', font=('Arial', 18))
-        books_area_heading.grid(column=0,row=0)
-        books_area = st.ScrolledText(dashboard, width=100, height=20)
-        books_area.grid(column=0, row=11, rowspan=20)
-        books_area.configure(state='disabled')
 
 #####MAIN FUNCTIONS######
 
@@ -96,9 +95,6 @@ window.title("Library Management System - ADMIN")
 window.geometry("1100x580")
 
 tab_control = ttk.Notebook(window)
-
-dashboard = Frame(tab_control, background="#FEEAE6")
-tab_control.add(dashboard, text="Dashboard")
 
 book_checkout = Frame(tab_control, background="#FEEAE6")
 tab_control.add(book_checkout, text="Book Checkout")
@@ -117,6 +113,5 @@ if __name__ == "__main__":
     GUI.recommendations()
     GUI.checkout()
     GUI.returns()
-    GUI.books_Available()
 
 window.mainloop()
