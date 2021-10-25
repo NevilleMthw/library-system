@@ -12,6 +12,10 @@ class ReturnBook:
         self.Database = Database()
 
     def returns(self, book_id_entry: str) -> str:
+        """
+        This function checks whether the bookID entered is right for the return.
+        @param book_id_entry: Will take the BookID input.
+        """
         return_result = self.Database.book_Return(book_id_entry)
         if book_id_entry == return_result:
             print("This works")

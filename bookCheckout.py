@@ -9,6 +9,12 @@ class CheckoutBook:
         self.Database = Database()
 
     def issue(self, member_id_entry: str, book_id_entry: str) -> str:
+        """
+        This function contains the checkout/issue capabilities of the program.
+        Will check if the bookID is entered in accordance to the data in the DB.
+        @param member_id_entry: Will take the memberID input
+        @param book_id_entry: Will take the bookID input.
+        """
         issue_id_change = self.Database.book_MemberID_Change(
             member_id_entry, book_id_entry
         )

@@ -9,6 +9,7 @@ class OverdueFines:
         self.Database = Database()
 
     def overdue(self) -> str:
+        """This function returns the overdue table."""
         overdue_change = self.Database.book_Return()
         print(overdue_change)
         return overdue_change

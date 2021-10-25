@@ -36,15 +36,21 @@ class Database:
             finally:
                 self.populate_DB()
 
-    # Converting digital data to binary format
-    def convert_Image(self, photo):
+    def convert_Image(self, photo) -> bytes:
+        """
+        This function will convert digital data to binary format.
+        @param photo: Will be used for the image name.
+        """
         with open(photo, "rb") as books_img:
             img_data = books_img.read()
         books_img.close()
         return img_data
 
-    # Connecting to database where image is being read as bytes and then inserted as a tuple.
-    def insert_Image(self, book):
+    def insert_Image(self, book) -> None:
+        """
+        Connecting to the database where image is being read as bytes and then inserted through the form of a tuple.
+        @param book: This parameter will take the image and convert it to a tuple.
+        """
         try:
             self.connection = sqlite3.connect("Library.db")
             self.connection.execute("pragma journal_mode=wal")
@@ -64,13 +70,19 @@ class Database:
                 self.connection.close()
                 print("FINISHED.")
 
-    # Convert binary data to proper format
-    def write_Img(self, data, filename):
+    def write_Img(self, data, filename) -> None:
+        """
+        This function will convert binary data to proper format.
+        @param data: Will be used as a buffer for writing the image onto the hard drive.
+        @param filename: Will be used as the image name.
+        """
         with open(filename, "wb") as file:
             file.write(data)
 
-    # Retrieve the image as BLOB data type and write onto the hard drive.
-    def write_Img_Data(self):
+    def write_Img_Data(self) -> None:
+        """
+        Retrieve the image as BLOB data type and write onto the hard drive.
+        """
         try:
             global r_data
             r_data = ""
@@ -95,6 +107,7 @@ class Database:
                 print("sqlite connection is closed")
 
     def populate_DB(self) -> None:
+        """This function would read the text files and insert into the respective tables."""
         try:
             with open("Book_Info.txt") as file_open:
                 for row in csv.reader(file_open, delimiter=","):
@@ -113,8 +126,12 @@ class Database:
         except Exception as e:
             print(e)
 
-    # This function would work during the checkout phase which would update the Book_Info table then insert to the Loan_History and Overdue_Books.
     def book_MemberID_Change(self, member_id_entry: str, book_id_entry: str) -> str:
+        """
+        This function would work during the checkout phase which would update the Book_Info table then insert to the Loan_History and Overdue_Books.
+        @param member_id_entry: Will take the memberID input.
+        @param book_id_entry: Will take the bookID input.
+        """
         with sqlite3.connect("Library.db", isolation_level=None) as connection:
             cursor = connection.cursor()
             connection.execute("pragma journal_mode=wal")
@@ -138,9 +155,12 @@ class Database:
             connection.commit()
             return result.fetchall(), result1.fetchall(), result2.fetchall()
 
-    # This function would update the Loan_History table which would then go onto the Overdue_Books update,
-    # where the overdue days and fines are bein calculated through SQL query using JULIANDAY conversion.
     def book_Return(self, book_id_entry: str) -> None:
+        """
+        This function would update the Loan_History table which would then go onto the Overdue_Books update, 
+        where the overdue days and fines are being calculated through SQL query using JULIANDAY conversion.
+        @param book_id_entry: Will take the bookID input.
+        """
         with sqlite3.connect("Library.db", isolation_level=None) as connection:
             return_date = datetime.now().strftime("%Y-%m-%d")
             fine_amount = 0.25
@@ -153,6 +173,7 @@ class Database:
                     book_id_entry,
                 ),
             )
+            # Calculation of fines and overdue days through conversion of data types within the SQL query.
             result1 = cursor.execute(
                 "UPDATE Overdue_Books SET ReturnDate = ? ,OverdueDays = CAST(JULIANDAY(?) - (SELECT JULIANDAY(t.CheckoutDate) FROM Overdue_Books t WHERE t.BookID = Overdue_Books.BookID) AS INTEGER) ,Fines = ? * CAST(JULIANDAY(?) - (SELECT JULIANDAY(t.CheckoutDate) FROM Overdue_Books t WHERE t.BookID = Overdue_Books.BookID) AS INTGER) WHERE BookID = ?",
                 (
