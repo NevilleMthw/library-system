@@ -17,7 +17,7 @@ Text Files: Loan_History.txt (100 transactions) and Book_Info.txt.
    2. Overall GUI design could be made more presentable and pleaseing to the eyes.
    3. The calculation of book fines and overdue days could be better suited or placed if done in the `bookCharge` python module instead of a direct SQL query.
    4. Labels or Messageboxes could be used to show once button is clicked for better readability and understanding.
-   5. `Recommendations` logic function has not been implemented.
+   5. `Recommendations` logic function has not been implemented. However, a matplotlib graph has just been shown.
 3. Problems faced:
    1. Time management.
    2. Coursework specification understanding.
